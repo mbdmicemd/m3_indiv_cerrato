@@ -1,0 +1,9 @@
+
+wget -r https://opendata.emtmadrid.es/getattachment/1a73b8d3-e2c6-4306-8ac3-9ce2f032bef1/Bicimad_Stations_201812.aspx -O /home/acerrato/m3_indiv/data/estaciones/Bicimad_Stations_201812.zip
+
+wget -r https://opendata.emtmadrid.es/getattachment/17206b97-1de9-4c95-a20f-3331d699d2fa/Bicimad_Stations_201901.aspx -O /home/acerrato/m3_indiv/data/estaciones/Bicimad_Stations_201901.zip
+
+wget -r https://opendata.emtmadrid.es/getattachment/2ebcc70a-4914-43c6-9ada-a0f0520032a4/201901_Usage_Bicimad.aspx -O /home/acerrato/m3_indiv/data/uso/201901_Usage_Bicimad.zip
+
+wget -r https://opendata.emtmadrid.es/getattachment/e62e5702-cdd5-4e23-9600-ead2711e24cb/201812_Usage_Bicimad.aspx  -O /home/acerrato/m3_indiv/data/uso/201812_Usage_Bicimad.zip
+

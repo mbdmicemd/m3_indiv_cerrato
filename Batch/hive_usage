@@ -1,0 +1,30 @@
+show databases;
+
+use cerrato;
+
+show tables;
+
+CREATE EXTERNAL TABLE usage_bicimad (data String);
+
+LOAD DATA INPATH "/user/acerrato/bicimad_m3/data/usage" INTO TABLE usage_bicimad;
+
+SELECT id, day, start_station, end_station, travel_time, user_type, age
+from usage_bicimad
+LATERAL VIEW json_tuple (data, '_id','unplug_hourTime','user_day_code','idunplug_station','idplug_station','travel_time','user_type','ageRange') 
+basic as idd, da, user_day, start_station, end_station, travel_time, user_type, age
+LATERAL VIEW json_tuple (basic.idd, '$oid')
+bb as id
+LATERAL VIEW json_tuple (basic.da, '$date')
+d as day
+limit 5;
+
+
+CREATE TABLE usage_def AS
+SELECT id, day, start_station, end_station, travel_time, user_type, age
+from usage_bicimad
+LATERAL VIEW json_tuple (data, '_id','unplug_hourTime','user_day_code','idunplug_station','idplug_station','travel_time','user_type','ageRange') 
+basic as idd, da, user_day, start_station, end_station, travel_time, user_type, age
+LATERAL VIEW json_tuple (basic.idd, '$oid')
+bb as id
+LATERAL VIEW json_tuple (basic.da, '$date')
+d as day;

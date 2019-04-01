@@ -1,0 +1,42 @@
+show databases;
+
+use cerrato;
+
+show tables;
+
+CREATE EXTERNAL TABLE station_bicimad (data String);
+
+LOAD DATA INPATH "/user/acerrato/bicimad_m3/data/stations" INTO TABLE station_bicimad;
+
+SELECT * FROM station_bicimad limit 1;
+
+select j.id as status_day,
+get_json_object (data, concat('$.stations[',stat.a,'].id')) as station_id,
+get_json_object (data, concat('$.stations[',stat.a,'].name')) as station_name,
+get_json_object (data, concat('$.stations[',stat.a,'].activate')) as activate,
+get_json_object (data, concat('$.stations[',stat.a,'].no_available')) as no_available,
+get_json_object (data, concat('$.stations[',stat.a,'].light')) as light,
+get_json_object (data, concat('$.stations[',stat.a,'].total_bases')) as total_bases,
+get_json_object (data, concat('$.stations[',stat.a,'].free_bases')) as free_bases,
+get_json_object (data, concat('$.stations[',stat.a,'].reservations_count')) as reservations_count,
+get_json_object (data, concat('$.stations[',stat.a,'].dock_bikes')) as dock_bikes
+from station_bicimad
+lateral view json_tuple (data, '_id') j as id
+lateral view posexplode (split(get_json_object (data, '$.stations[*]'),'","'))stat as a, x limit 172
+where get_json_object (data, concat('$.stations[',stat.a,'].id')) as station_id is not null
+
+
+CREATE TABLE station_def AS 
+select j.id as status_day,
+get_json_object (data, concat('$.stations[',stat.a,'].id')) as station_id,
+get_json_object (data, concat('$.stations[',stat.a,'].name')) as station_name,
+get_json_object (data, concat('$.stations[',stat.a,'].activate')) as activate,
+get_json_object (data, concat('$.stations[',stat.a,'].no_available')) as no_available,
+get_json_object (data, concat('$.stations[',stat.a,'].light')) as light,
+get_json_object (data, concat('$.stations[',stat.a,'].total_bases')) as total_bases,
+get_json_object (data, concat('$.stations[',stat.a,'].free_bases')) as free_bases,
+get_json_object (data, concat('$.stations[',stat.a,'].reservations_count')) as reservations_count,
+get_json_object (data, concat('$.stations[',stat.a,'].dock_bikes')) as dock_bikes
+from station_bicimad
+lateral view json_tuple (data, '_id') j as id
+lateral view posexplode (split(get_json_object (data, '$.stations[*]'),'","'))stat as a, x limit 172
